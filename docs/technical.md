@@ -1,62 +1,76 @@
 ## Architecture
-- Application web responsive (MVP) en architecture client-serveur.
-- Backend API REST sécurisée.
-- Frontend SPA.
-- Base de données relationnelle.
-- Hébergement cloud (scalable horizontalement).
+- Frontend : Next.js (React, TypeScript), authentification OAuth2/OIDC, gestion des rôles (RBAC).
+- Backend : FastAPI (Python), architecture modulaire.
+- Composants : API Gateway, Evaluation Engine, Reporting Service, Monitoring Service, Data Lake.
+- Communication : REST JSON, OpenAPI 3.
+- Conteneurisation : Docker.
+- Orchestration : Kubernetes.
 
-## Stack recommandée
-- Frontend : React / Vue (SPA responsive).
-- Backend : Node.js (NestJS) ou Laravel.
-- Base de données : PostgreSQL.
-- Stockage fichiers (photos états des lieux, documents) : object storage (S3 compatible).
-- Authentification : JWT + refresh token.
+## Multi-tenancy
+- Base de données partagée.
+- Isolation logique via champ obligatoire `tenantId` sur toutes les entités métier.
+- Filtrage systématique côté backend.
+- Tests automatiques garantissant l’absence de fuite inter-tenant.
+
+## Modèle de déploiement
+- SaaS mutualisé (cluster partagé, isolation logique).
+- Option Enterprise single-tenant : cluster Kubernetes dédié + base dédiée.
+- Cloud principal choisi par client (AWS, Azure ou GCP).
+
+## Backend – Modules
+1. Auth & Access Control
+   - OAuth2 / OIDC.
+   - SSO (Azure AD, Google Workspace) réservé Enterprise.
+   - RBAC : CAIO, Data Scientist, DSI, Direction.
+   - Audit logs horodatés.
+
+2. Evaluation Engine
+   - Intégrations : OpenAI, Claude, Gemini, Mistral.
+   - Framework d’évaluation pondéré.
+   - Calcul du Score Global sur 100 selon pondérations fixes.
+   - Stockage des métriques détaillées par modèle et par exécution.
+
+3. Benchmark Service
+   - Comparaison multi-modèles sur un même dataset.
+   - Historisation des résultats.
+   - Classement dynamique.
+
+4. Reporting Service
+   - Génération de rapports PDF.
+   - Inclusion : scores, graphiques, conformité, classification AI Act.
+
+5. Monitoring Service
+   - Évaluations planifiées.
+   - Détection dérive performance.
+   - Système d’alertes.
+
+## API REST
+- POST /evaluate
+- GET /results/{evaluationId}
+- POST /benchmark
+- GET /report/{evaluationId}
+- Authentification requise (Bearer JWT).
+
+## Données
+- Base relationnelle (PostgreSQL recommandé).
+- Stockage objets (S3/Azure Blob/GCS) pour rapports et datasets.
+- Data Lake pour historisation et analyses longitudinales.
 
 ## Sécurité
-- RBAC (role-based access control) strict.
-- Journal d’audit persistant pour actions sensibles.
-- Chiffrement TLS (HTTPS obligatoire).
-- Données sensibles chiffrées au repos (documents, permis, CB tokens).
-- Conformité RGPD : consentement, droit d’accès, suppression, journalisation.
+- TLS 1.3 en transit.
+- AES-256 au repos.
+- JWT signés.
+- Journalisation complète des actions.
+- Conformité RGPD (suppression, export données).
 
-## Paiement
-- Intégration passerelle paiement compatible Maroc (ex : CMI ou Stripe si autorisé).
-- Tokenisation carte bancaire.
-- Gestion empreinte bancaire (pre-authorization).
-- Webhooks pour confirmation paiement.
+## CI/CD
+- Environnements : dev, staging, prod.
+- Pipeline CI : tests unitaires, intégration, sécurité.
+- Déploiement automatisé sur cluster Kubernetes.
 
-## Facturation
-- Génération PDF serveur.
-- Gestion TVA paramétrable.
-- Numérotation légale séquentielle.
-
-## Notifications
-- Service email transactionnel (ex : SendGrid).
-- Service SMS (provider local Maroc).
-- Templates multilingues.
-
-## Performance
-- Support cible : 50–200 utilisateurs internes simultanés.
-- Mise en cache des disponibilités.
-- Indexation DB sur réservations, véhicules, agences.
-
-## Scalabilité
-- Architecture stateless.
-- Séparation stockage fichiers.
-- Prévu pour montée en charge > 1000 véhicules.
-
-## Logs & Monitoring
-- Centralisation des logs.
-- Monitoring applicatif et alerting.
-
-## Internationalisation
-- Système i18n frontend + backend.
-- Devise MAD configurable.
-
-## API
-- API REST versionnée (/api/v1).
-- Documentation OpenAPI/Swagger.
-
-## Sauvegardes
-- Backup quotidien base de données.
-- Rétention minimum 30 jours.
+## Critères d’acceptation techniques
+- Calcul exact du Score Global selon pondérations définies.
+- Isolation stricte des données par tenantId.
+- API conforme OpenAPI et testée.
+- Génération PDF fiable et exploitable.
+- Authentification et audit logs opérationnels.

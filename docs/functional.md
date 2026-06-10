@@ -1,243 +1,194 @@
-# Spécification Fonctionnelle – Projet "location 3"
+# 1. Vision et objectifs
 
-## 1. Contexte et objectifs
+## Objectif du produit
+Mettre à disposition une plateforme SaaS permettant la mesure standardisée de la performance des systèmes d’IA (LLM, RAG, agents), afin de :
+- Détecter les hallucinations, biais et failles de sécurité.
+- Vérifier la conformité réglementaire (AI Act, RGPD, ISO 42001).
+- Réaliser des benchmarks multi-modèles.
+- Suivre les performances dans le temps.
+- Mesurer le ROI et réduire les risques liés à l’IA.
 
-Le projet "location 3" vise à mettre en place un outil web de gestion pour un réseau de location de véhicules multi-agences au Maroc.
-
-Objectifs principaux :
-- Centraliser la gestion des agences, véhicules et réservations.
-- Proposer un portail client permettant la réservation en ligne.
-- Automatiser les processus métier (contrats, facturation, cautions, sinistres, amendes).
-- Fournir des indicateurs de pilotage (CA, taux d’occupation, rentabilité, etc.).
-- Garantir la conformité à la réglementation marocaine (TVA, facturation) et au RGPD.
-
-Le MVP couvre un réseau de 5 à 10 agences et 100 à 500 véhicules.
+Le produit fournit un scoring global sur 100 basé sur un framework d’évaluation pondéré.
 
 ---
 
-## 2. Périmètre métier
+# 2. Utilisateurs cibles
 
-### 2.1 Types de véhicules
-- Voitures
-- SUV
-- Utilitaires
-- Véhicules premium
-
-### 2.2 Structure multi-agences
-- Gestion de 5 à 10 agences au lancement.
-- Gestion de 100 à 500 véhicules.
-- Transferts de véhicules entre agences avec suivi.
+## Rôles métiers
+- **Chief AI Officer (CAIO)** : gouvernance IA, conformité, supervision globale.
+- **Data Scientist** : optimisation des modèles, analyse détaillée des performances.
+- **DSI** : architecture, sécurité, coûts et intégration technique.
+- **Direction Générale** : vision synthétique, suivi ROI.
+- **Utilisateurs SaaS authentifiés** : accès aux fonctionnalités selon leur rôle et leur plan.
 
 ---
 
-## 3. Utilisateurs cibles
+# 3. Périmètre fonctionnel (MVP et socle produit)
 
-### 3.1 Utilisateurs internes
-- Super Admin
-- Administrateur société
-- Responsable d’agence
-- Agent comptoir
-- Comptabilité
+## 3.1 Dashboard central
+- Visualisation des modèles évalués.
+- Affichage des scores détaillés et score global.
+- Suivi des coûts associés.
+- Alertes éventuelles.
+- Vue comparative (benchmark).
 
-Chaque rôle dispose de droits spécifiques selon son périmètre (global ou agence).
+## 3.2 Évaluation automatique
+Évaluation des systèmes IA selon plusieurs axes :
+- Accuracy
+- Robustesse
+- Hallucination
+- Toxicité
+- Autres axes définis dans le framework
 
-### 3.2 Clients finaux
-- Particuliers ou professionnels réservant des véhicules.
-- Accès à un espace client dédié.
+Chaque évaluation :
+- Est liée à un modèle et à une entreprise.
+- Produit des métriques détaillées.
+- Contribue au calcul d’un Score Global sur 100.
 
----
+## 3.3 Framework de scoring
+- Pondération fixe des axes d’évaluation : 30 / 20 / 15 / 15 / 10 / 10.
+- Calcul automatique d’un Score Global.
+- Score exploitable dans les dashboards et rapports.
 
-## 4. Fonctionnalités principales (MVP)
+## 3.4 Benchmark multi-modèles
+- Comparaison de plusieurs modèles.
+- Visualisation comparative des scores.
+- Historisation des performances.
 
-### 4.1 Gestion des véhicules
-- Fiches véhicules (catégorie, agence, statut, etc.).
-- Suivi de disponibilité.
-- Gestion des transferts inter-agences.
+## 3.5 Monitoring continu
+- Suivi dans le temps des performances.
+- Détection d’écarts significatifs.
+- Classification AI Act.
+- Mécanismes d’explicabilité.
 
-### 4.2 Gestion des réservations
-- Réservation via back-office et portail client.
-- Vérification de disponibilité en temps réel.
-- Modification autorisée selon disponibilité.
-- Politique d’annulation :
-  - Gratuite jusqu’à 24h avant le départ.
-  - Frais configurables ensuite.
+## 3.6 Rapports d’audit
+- Génération de rapports PDF.
+- Exploitables pour audit interne et conformité.
+- Intégration des scores, méthodologie et résultats.
 
-### 4.3 Tarification
-- Prix par jour.
-- Tarifs saisonniers.
-- Options payantes.
-- Kilométrage limité ou illimité.
-- Promotions.
+## 3.7 API REST
+Endpoints principaux :
+- `evaluate`
+- `results`
+- `benchmark`
+- `report`
 
-### 4.4 Contrats de location
-- Génération automatique de contrat.
-- Gestion des assurances et franchises configurables.
-- Signature électronique.
-- Génération automatique de PDF.
-
-### 4.5 États des lieux
-- États des lieux départ et retour.
-- Ajout de photos.
-- Signature électronique.
-- Génération de document PDF.
-
-### 4.6 Facturation et TVA
-- Facturation conforme aux règles marocaines.
-- Gestion complète de la TVA.
-- Génération et export des factures.
-
-### 4.7 Paiements et cautions
-- Paiement en ligne par carte bancaire.
-- Empreinte bancaire pour la caution.
-- Restitution manuelle après contrôle du véhicule.
-
-### 4.8 Gestion des clients
-- Fiche client complète.
-- Historique des réservations.
-- Gestion des documents (permis, pièces justificatives).
-- Programme de fidélité.
-- Espace client :
-  - Historique des réservations.
-  - Téléchargement contrats et factures.
-  - Gestion du profil.
-
-### 4.9 Gestion des sinistres et amendes
-- Enregistrement des sinistres.
-- Workflow complet des amendes :
-  - Réception.
-  - Affectation au client.
-  - Refacturation.
-  - Suivi du paiement.
-
-### 4.10 Notifications
-- Notifications automatiques par email et SMS :
-  - Confirmation de réservation.
-  - Rappels.
-  - Retards.
-  - Informations liées aux contrats et paiements.
-
-### 4.11 Reporting et tableaux de bord
-- Chiffre d’affaires.
-- Taux d’occupation.
-- Rentabilité par véhicule.
-- Réservations.
-- Retards.
-- Sinistres.
-
-### 4.12 Journal d’audit
-- Traçabilité obligatoire des actions sensibles :
-  - Modification de contrat.
-  - Restitution de caution.
-  - Modification tarifaire.
-
-### 4.13 Mini CMS
-- Administration des contenus :
-  - CGU.
-  - Assurances.
-  - FAQ.
-  - Pages informatives.
+L’API permet l’intégration avec des systèmes tiers.
 
 ---
 
-## 5. Hors périmètre MVP (Phase 2)
+# 4. Règles de gestion
 
-- Application mobile dédiée.
-- Intégration logiciel comptable.
-- Intégration télématique / GPS.
-- Gestion des partenaires / apporteurs d’affaires.
+## 4.1 Multi-tenancy
+- Base de données partagée.
+- Isolation logique via `tenant_id`.
+- Chaque évaluation est rattachée à une entreprise.
 
----
+## 4.2 Plans tarifaires
+- Limites sur le nombre de modèles.
+- Limites sur le nombre d’évaluations.
+- Accès restreint à certaines fonctionnalités.
+- SSO réservé à l’offre Enterprise.
 
-## 6. Contraintes réglementaires et linguistiques
+## 4.3 Sécurité et traçabilité
+- Authentification obligatoire.
+- Logs d’audit pour traçabilité complète des actions.
 
-- Exploitation au Maroc.
-- Gestion de la devise MAD.
-- Multilingue : français et anglais.
-- Conformité RGPD.
-- Conformité à la législation marocaine en matière de facturation et TVA.
-
-
-# Spécification Technique – Projet "location 3"
-
-## 1. Architecture générale
-
-### 1.1 Type d’application
-- Application web responsive (MVP).
-- Architecture centralisée multi-agences.
-
-### 1.2 Organisation logique
-- Frontend :
-  - Portail client.
-  - Back-office (rôles internes).
-- Backend :
-  - API centralisée.
-  - Gestion des règles métier (réservations, tarification, facturation, cautions, amendes).
-- Base de données centralisée multi-tenant (logique par agence).
+## 4.4 Critères d’acceptation fonctionnels
+- Calcul fiable du Score Global selon les pondérations définies.
+- Benchmarks comparatifs opérationnels.
+- Génération de rapports PDF exploitables.
+- API conforme aux endpoints définis.
+- Authentification sécurisée et traçabilité complète.
 
 ---
 
-## 2. Gestion des accès et sécurité
+# 1. Architecture globale
 
-- Authentification sécurisée pour utilisateurs internes et clients.
-- Gestion des rôles et permissions.
-- Journal d’audit des actions sensibles.
-- Sécurisation des paiements en ligne.
-- Protection des données personnelles (RGPD).
+## 1.1 Typologie
+Plateforme SaaS avec :
+- Modèle mutualisé par défaut (multi-tenant).
+- Option de déploiement dédié (single-tenant) pour clients Enterprise.
 
----
+## 1.2 Composants principaux
+- **Frontend** : Next.js, React, TypeScript.
+- **Backend** : Python, FastAPI.
+- **API Gateway** : point d’entrée centralisé.
+- **Evaluation Engine** : moteur de calcul des métriques et du score.
+- **Reporting Service** : génération de rapports PDF.
+- **Data Lake** : stockage des données d’évaluation.
 
-## 3. Paiement en ligne
-
-- Intégration d’une passerelle de paiement par carte bancaire (choix non précisé).
-- Gestion :
-  - Paiement total ou partiel.
-  - Empreinte bancaire pour caution.
-- Gestion des statuts de transaction.
-
----
-
-## 4. Gestion documentaire
-
-- Génération automatique de PDF (contrats, états des lieux, factures).
-- Stockage sécurisé des documents.
-- Upload et stockage de documents clients.
+## 1.3 IA et orchestration
+- LangChain
+- LlamaIndex
+- OpenAI SDK
 
 ---
 
-## 5. Notifications
+# 2. Infrastructure et déploiement
 
-- Intégration d’un service email.
-- Intégration d’un service SMS.
-- Système de templates multilingues.
+## 2.1 Cloud
+- Déploiement sur un cloud principal par client (AWS, Azure ou GCP).
+- Conteneurisation via Docker.
+- Orchestration via Kubernetes.
 
----
-
-## 6. Internationalisation
-
-- Support multilingue (FR/EN).
-- Gestion de la devise MAD.
-- Paramétrage des taux de TVA.
+## 2.2 Modèle de déploiement
+- SaaS mutualisé (multi-tenant, isolation logique via `tenant_id`).
+- Option single-tenant pour Enterprise.
 
 ---
 
-## 7. Reporting
+# 3. Intégrations
 
-- Requêtes analytiques sur :
-  - CA.
-  - Occupation.
-  - Rentabilité par véhicule.
-  - Sinistres.
-- Export possible des données (format non précisé).
+## 3.1 LLM externes
+- GPT-4
+- Claude
+- Gemini
+- Mistral
+
+## 3.2 SSO
+- Azure AD
+- Google Workspace
+- Réservé à l’offre Enterprise.
 
 ---
 
-## 8. Évolutivité (Phase 2)
+# 4. Sécurité
 
-- API extensible pour intégration comptable.
-- API pour intégration télématique / GPS.
-- Support futur application mobile.
+## 4.1 Authentification et autorisation
+- OAuth2.
+- SSO (Enterprise).
+- Gestion des rôles.
 
+## 4.2 Protection des données
+- Chiffrement AES-256.
+- TLS 1.3 pour les communications.
+- Isolation logique des données par `tenant_id`.
 
-# contextSummary
+## 4.3 Audit et traçabilité
+- Logs d’audit complets.
+- Traçabilité des actions utilisateurs.
 
-Le projet "location 3" consiste à développer un outil web responsive de gestion pour un réseau de location de véhicules multi-agences au Maroc (5 à 10 agences, 100 à 500 véhicules). Il comprend un back-office complet et un portail client avec réservation en ligne, paiement par carte bancaire et gestion des cautions par empreinte. Le MVP inclut la gestion des véhicules, disponibilités, tarification avancée (saisons, options, promotions), contrats, facturation conforme aux règles marocaines (TVA), états des lieux avec photos et signature électronique, gestion des sinistres et amendes, reporting, notifications email/SMS, journal d’audit et mini CMS. L’application est multilingue (FR/EN), en devise MAD, conforme RGPD. Les intégrations comptables, télématiques et l’application mobile sont prévues en phase 2.
+---
+
+# 5. Contraintes techniques
+
+- Respect des pondérations fixes pour le scoring.
+- API REST conforme aux endpoints définis.
+- Architecture compatible multi-cloud (un cloud principal par déploiement).
+- Compatibilité multi-LLM.
+- Génération fiable et reproductible des rapports.
+
+---
+
+# 6. Critères d’acceptation techniques
+
+- Calcul exact et reproductible du Score Global.
+- Isolation correcte des données multi-tenant.
+- API sécurisée et fonctionnelle.
+- Génération de rapports PDF conforme.
+- Intégrations LLM et SSO opérationnelles.
+
+---
+
+"contextSummary": "Le projet consiste à développer une plateforme SaaS d’évaluation et de benchmark de systèmes d’IA (LLM, RAG, agents). Elle permet de mesurer la performance, détecter hallucinations et biais, assurer la conformité (AI Act, RGPD, ISO 42001) et produire un score global pondéré sur 100. La solution inclut un dashboard central, un moteur d’évaluation, un benchmark multi-modèles, un monitoring continu et des rapports PDF d’audit. L’architecture repose sur Next.js (frontend) et FastAPI (backend), avec un moteur d’évaluation basé sur LangChain et intégrations multi-LLM. Le modèle est SaaS multi-tenant avec isolation logique via tenant_id, et option single-tenant pour les clients Enterprise, déployé sur un cloud principal au choix (AWS, Azure ou GCP)."}
